@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCHITECT OF DIGITAL REALMS | Code × 3D × Motion × AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== СБРОС СТИЛЕЙ И БАЗОВЫЕ НАСТРОЙКИ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --space-black: #0A0A0F;
+            --deep-space: #10101E;
+            --neon-blue: #00F3FF;
+            --electric-purple: #CC00FF;
+            --acid-green: #00FF9D;
+            --hologram-white: rgba(255, 255, 255, 0.9);
+            --glow-blue: rgba(0, 243, 255, 0.3);
+            --glow-purple: rgba(204, 0, 255, 0.3);
+            --glow-green: rgba(0, 255, 157, 0.3);
+            --mac-red: #FF5F57;
+            --mac-yellow: #FFBD2E;
+            --mac-green: #28CA42;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--space-black);
+            color: var(--hologram-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: default;
+        }
+
+        /* ===== ПРЕЛОАДЕР ===== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--space-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s, visibility 0.8s;
+        }
+
+        .loading-universe {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .loading-logo {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 0 8px currentColor);
+            opacity: 0;
+            animation: floatIn 0.8s forwards;
+        }
+
+        .csharp-logo { color: var(--neon-blue); top: 20%; left: 50%; transform: translateX(-50%); animation-delay: 0.2s; }
+        .python-logo { color: #3776AB; top: 50%; left: 20%; animation-delay: 0.4s; }
+        .blender-logo { color: #F5792A; top: 50%; left: 80%; animation-delay: 0.6s; }
+        .ae-logo { color: #9999FF; top: 80%; left: 30%; animation-delay: 0.8s; }
+        .pr-logo { color: #EA77FF; top: 80%; left: 70%; animation-delay: 1s; }
+
+        .loading-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            color: var(--acid-green);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
+        .main-container {
+            opacity: 0;
+            animation: fadeIn 1s 1.5s forwards;
+        }
+
+        /* ===== ШАПКА / HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--glow-purple) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, var(--glow-blue) 0%, transparent 40%),
+                var(--deep-space);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Анимированные частицы на фоне */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        /* 3D коллаж логотипов */
+        .logo-collage {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            height: 400px;
+            margin: 40px auto;
+            perspective: 1000px;
+        }
+
+        .collage-item {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px currentColor);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .collage-item:hover {
+            transform: scale(1.3) rotate(10deg);
+            z-index: 10;
+        }
+
+        /* Позиционирование логотипов */
+        .item1 { top: 10%; left: 10%; color: var(--neon-blue); transform: rotateZ(-15deg); }
+        .item2 { top: 60%; left: 15%; color: #3776AB; transform: rotateZ(5deg); }
+        .item3 { top: 20%; left: 80%; color: #F5792A; transform: rotateZ(20deg); }
+        .item4 { top: 70%; left: 70%; color: #9999FF; transform: rotateZ(-10deg); }
+        .item5 { top: 40%; left: 40%; color: #EA77FF; transform: rotateZ(0deg); }
+        .item6 { top: 10%; left: 60%; color: #000000; background: white; border-radius: 8px; padding: 5px; transform: rotateZ(-5deg); }
+        .item7 { top: 65%; left: 40%; color: #222C3C; transform: rotateZ(15deg); }
+        .item8 { top: 35%; left: 75%; color: #0C8C04; transform: rotateZ(-20deg); }
+
+        /* Центральный заголовок */
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hologram-text {
+            background: linear-gradient(90deg, var(--neon-blue), var(--electric-purple), var(--acid-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: hologramShift 3s infinite alternate;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--acid-green);
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Контакты в шапке */
+        .hero-contacts {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            z-index: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 243, 255, 0.1);
+            border-color: var(--neon-blue);
+            transform: translateY(-3px);
+        }
+
+        /* ===== КОНСОЛЬ НАВИГАЦИИ ===== */
+        .console-nav {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px 15px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .console-command {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: var(--acid-green);
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-command:hover {
+            background: rgba(0, 255, 157, 0.1);
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .console-command::before {
+            content: '>';
+            margin-right: 8px;
+            color: var(--neon-blue);
+        }
+
+        /* ===== ОСНОВНЫЕ СЕКЦИИ ===== */
+        .section {
+            padding: 100px 5%;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--neon-blue);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+        }
+
+        /* ===== СЕКЦИЯ "ОБО МНЕ" В СТИЛЕ MACOS ===== */
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .portrait-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            filter: drop-shadow(0 0 20px var(--glow-purple));
+        }
+
+        .polygon-portrait {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, var(--electric-purple), var(--neon-blue));
+            clip-path: polygon(0% 0%, 100% 10%, 90% 100%, 10% 90%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        /* Стиль окна MacOS */
+        .macos-window {
+            background: rgba(30, 30, 40, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .macos-header {
+            background: rgba(50, 50, 60, 0.9);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .macos-controls {
+            display: flex;
+            gap: 10px;
+            margin-right: 20px;
+        }
+
+        .macos-control {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .macos-close { background: var(--mac-red); }
+        .macos-minimize { background: var(--mac-yellow); }
+        .macos-maximize { background: var(--mac-green); }
+
+        .macos-control:hover {
+            transform: scale(1.1);
+        }
+
+        .macos-title {
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        .macos-content {
+            padding: 40px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .macos-section {
+            margin-bottom: 30px;
+        }
+
+        .macos-section-title {
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .macos-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .macos-list li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .macos-list li::before {
+            content: '▸';
+            color: var(--acid-green);
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight {
+            color: var(--acid-green);
+            font-weight: 600;
+        }
+
+        /* ===== СЕКЦИЯ "НАВЫКИ" ===== */
+        .skills-matrix {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-node {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .skill-node::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .skill-node:hover {
+            border-color: var(--neon-blue);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 243, 255, 0.1);
+        }
+
+        .skill-node:hover::before {
+            left: 100%;
+        }
+
+        .skill-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--acid-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            font-size: 1.8rem;
+        }
+
+        .ai-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .ai-tag {
+            background: rgba(204, 0, 255, 0.1);
+            color: var(--electric-purple);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(204, 0, 255, 0.3);
+        }
+
+        /* ===== СЕКЦИЯ "ПРИМЕРЫ РАБОТ" ===== */
+        .video-works {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .video-card {
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 20px 40px rgba(0, 243, 255, 0.2);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, var(--electric-purple), var(--neon-blue));
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-thumbnail::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+            border: 3px solid var(--neon-blue);
+        }
+
+        .play-button:hover {
+            background: var(--neon-blue);
+            color: var(--space-black);
+            transform: scale(1.1);
+        }
+
+        .video-info {
+            padding: 25px;
+        }
+
+        .video-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--acid-green);
+            margin-bottom: 15px;
+        }
+
+        .video-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .video-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--acid-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 157, 0.3);
+        }
+
+        .video-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .video-link {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            text-align: center;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .video-link:hover {
+            background: var(--neon-blue);
+            color: var(--space-black);
+            transform: translateY(-3px);
+        }
+
+        .video-link.youtube {
+            background: rgba(255, 0, 0, 0.1);
+            border-color: #FF0000;
+            color: #FF0000;
+        }
+
+        .video-link.youtube:hover {
+            background: #FF0000;
+            color: white;
+        }
+
+        /* ===== СЕКЦИЯ "КОНТАКТЫ" ===== */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--glow-blue);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--electric-purple));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.3);
+        }
+
+        /* ===== ПОДВАЛ ===== */
+        footer {
+            padding: 50px 5%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(0, 243, 255, 0.1);
+        }
+
+        .signature {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            margin-bottom: 20px;
+        }
+
+        /* ===== АНИМАЦИИ ===== */
+        @keyframes floatIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes hologramShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(30deg); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 10px currentColor; }
+            50% { box-shadow: 0 0 20px currentColor; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 1024px) {
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .console-nav {
+                right: 15px;
+                padding: 15px 10px;
+            }
+            
+            .console-command {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+            
+            .video-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .logo-collage {
+                height: 300px;
+            }
+            
+            .collage-item {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+            
+            .hero-contacts {
+                flex-direction: column;
+                gap: 15px;
+                bottom: 20px;
+            }
+            
+            .section {
+                padding: 70px 5%;
+            }
+            
+            .console-nav {
+                display: none;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .collage-item {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .skill-node {
+                padding: 20px;
+            }
+            
+            .contact-form {
+                padding: 25px;
+            }
+            
+            .macos-content {
+                padding: 25px;
+            }
+            
+            .video-info {
+                padding: 20px;
+            }
+            
+            .video-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Прелоадер -->
+    <div id="preloader">
+        <div class="loading-universe">
+            <div class="loading-logo csharp-logo"><i class="fa-brands fa-microsoft"></i></div>
+            <div class="loading-logo python-logo"><i class="fa-brands fa-python"></i></div>
+            <div class="loading-logo blender-logo"><i class="fa-solid fa-cube"></i></div>
+            <div class="loading-logo ae-logo"><i class="fa-solid fa-film"></i></div>
+            <div class="loading-logo pr-logo"><i class="fa-solid fa-video"></i></div>
+        </div>
+        <div class="loading-text">
+            Initializing Universe();<br>
+            Loading Portfolio();<br>
+            <span id="loading-status">Rendering Awesome();</span>
+        </div>
+    </div>
+
+    <!-- Основной контейнер -->
+    <div class="main-container">
+        <!-- Консоль навигации -->
+        <nav class="console-nav">
+            <div class="console-command" data-section="about">run - about</div>
+            <div class="console-command" data-section="skills">load - skills</div>
+            <div class="console-command" data-section="works">render - works</div>
+            <div class="console-command" data-section="contact">compile - contact</div>
+        </nav>
+
+        <!-- Шапка сайта -->
+        <header class="hero">
+            <!-- Анимированные частицы -->
+            <div class="particles" id="particles"></div>
+            
+            <!-- Коллаж логотипов -->
+            <div class="logo-collage">
+                <div class="collage-item item1" title="C#">
+                    <i class="fa-brands fa-microsoft"></i>
+                </div>
+                <div class="collage-item item2" title="Python">
+                    <i class="fa-brands fa-python"></i>
+                </div>
+                <div class="collage-item item3" title="Blender">
+                    <i class="fa-solid fa-cube"></i>
+                </div>
+                <div class="collage-item item4" title="After Effects">
+                    <i class="fa-solid fa-film"></i>
+                </div>
+                <div class="collage-item item5" title="Premiere Pro">
+                    <i class="fa-solid fa-video"></i>
+                </div>
+                <div class="collage-item item6" title="Unity">
+                    <i class="fa-brands fa-unity"></i>
+                </div>
+                <div class="collage-item item7" title="Visual Studio">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <div class="collage-item item8" title="DaVinci Resolve">
+                    <i class="fa-solid fa-palette"></i>
+                </div>
+            </div>
+
+            <!-- Заголовок -->
+            <h1 class="hero-title hologram-text">ARCHITECT OF<br>DIGITAL REALMS</h1>
+            <p class="hero-subtitle">Code × 3D × Motion × AI</p>
+
+            <!-- Контакты -->
+            <div class="hero-contacts">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span id="phone-placeholder">+7 (928) 178-76-83</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span id="email-placeholder">makarevgenevich2017@gmail.com</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Секция "Обо мне" -->
+        <section id="about" class="section">
+            <h2 class="section-title">ОБО МНЕ</h2>
+            <div class="about-content">
+                <div class="portrait-container">
+                    <div class="polygon-portrait">
+                        <!-- Здесь будет ваше фото -->
+                        <i class="fas fa-user-astronaut"></i>
+                    </div>
+                </div>
+                <div class="macos-window">
+                    <div class="macos-header">
+                        <div class="macos-controls">
+                            <div class="macos-control macos-close"></div>
+                            <div class="macos-control macos-minimize"></div>
+                            <div class="macos-control macos-maximize"></div>
+                        </div>
+                        <div class="macos-title">Profile_Info.app</div>
+                    </div>
+                    <div class="macos-content">
+                        <div class="macos-section">
+                            <h3 class="macos-section-title"><i class="fas fa-user"></i> Креативный Разработчик & 3D Художник</h3>
+                            <p>Специализируюсь на широком спектре цифровых задач, сочетая технические навыки программирования с художественным видением в 3D-дизайне и моушн-графике.</p>
+                        </div>
+                        
+                        <div class="macos-section">
+                            <h3 class="macos-section-title"><i class="fas fa-cogs"></i> Ключевые Направления</h3>
+                            <ul class="macos-list">
+                                <li><span class="highlight">Программирование:</span> Разработка на C# и Python, создание инструментов и скриптов</li>
+                                <li><span class="highlight">3D Дизайн & CGI:</span> Полный цикл создания 3D-контента в Blender</li>
+                                <li><span class="highlight">Моушн & Видео:</span> Анимация и монтаж в After Effects, Premiere Pro, DaVinci Resolve</li>
+                                <li><span class="highlight">AI & Нейросети:</span> Генерация и обработка контента с помощью современных нейросетевых технологий</li>
+                                <li><span class="highlight">Интеграция технологий:</span> Комбинирование различных инструментов для достижения максимального результата</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="macos-section">
+                            <h3 class="macos-section-title"><i class="fas fa-lightbulb"></i> Подход к работе</h3>
+                            <p>Каждое направление — отдельная специализация, которую я осваиваю на профессиональном уровне. Это позволяет мне выбирать оптимальные инструменты для конкретной задачи и создавать качественный контент в любой из этих областей.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция "Навыки" -->
+        <section id="skills" class="section">
+            <h2 class="section-title">МАТРИЦА НАВЫКОВ</h2>
+            <div class="skills-matrix">
+                <div class="skill-node">
+                    <h3 class="skill-title"><i class="fas fa-code"></i> Программирование</h3>
+                    <p>Создание логики, инструментов и интерактивных решений. От скриптов до полноценных приложений.</p>
+                    <div class="skill-icons">
+                        <i class="fa-brands fa-microsoft" title="C#" style="color: #00F3FF;"></i>
+                        <i class="fa-brands fa-python" title="Python" style="color: #3776AB;"></i>
+                        <i class="fa-brands fa-unity" title="Unity" style="color: white;"></i>
+                    </div>
+                </div>
+                <div class="skill-node">
+                    <h3 class="skill-title"><i class="fas fa-cube"></i> 3D Дизайн & CGI</h3>
+                    <p>Моделирование, текстурирование, анимация, рендеринг и полный цикл создания CGI-контента.</p>
+                    <div class="skill-icons">
+                        <i class="fa-solid fa-cube" title="Blender" style="color: #F5792A;"></i>
+                        <i class="fas fa-shapes" title="Modeling" style="color: #CC00FF;"></i>
+                        <i class="fas fa-film" title="CGI" style="color: #00FF9D;"></i>
+                    </div>
+                </div>
+                <div class="skill-node">
+                    <h3 class="skill-title"><i class="fas fa-film"></i> Моушн & Видео</h3>
+                    <p>Анимация, визуальные эффекты, кинематографичный монтаж и цветокоррекция.</p>
+                    <div class="skill-icons">
+                        <i class="fa-solid fa-film" title="After Effects" style="color: #9999FF;"></i>
+                        <i class="fa-solid fa-video" title="Premiere Pro" style="color: #EA77FF;"></i>
+                        <i class="fa-solid fa-palette" title="DaVinci Resolve" style="color: #00FF9D;"></i>
+                    </div>
+                </div>
+                <div class="skill-node">
+                    <h3 class="skill-title"><i class="fas fa-robot"></i> AI & Нейросети</h3>
+                    <p>Работа с нейросетевыми технологиями для генерации и обработки видео/изображений:</p>
+                    <div class="ai-list">
+                        <span class="ai-tag">ComfyUI</span>
+                        <span class="ai-tag">WAN 2.1</span>
+                        <span class="ai-tag">WAN 2.2</span>
+                        <span class="ai-tag">LTX Video</span>
+                        <span class="ai-tag">LTX Video 2</span>
+                        <span class="ai-tag">Flux 1</span>
+                        <span class="ai-tag">Flux 2</span>
+                        <span class="ai-tag">Qwen Image</span>
+                        <span class="ai-tag">Stable Diffusion</span>
+                        <span class="ai-tag">RunwayML</span>
+                        <span class="ai-tag">Midjourney</span>
+                    </div>
+                    <div class="skill-icons">
+                        <i class="fas fa-robot" title="AI" style="color: #FF6B6B;"></i>
+                        <i class="fas fa-brain" title="Neural Networks" style="color: #4ECDC4;"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция "Примеры работ" -->
+        <section id="works" class="section">
+            <h2 class="section-title">ПРИМЕРЫ РАБОТ</h2>
+            <div class="video-works">
+                <div class="video-grid">
+                    <!-- Видео 1: Монтаж рекламы ресторана -->
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <a href="https://drive.google.com/file/d/17Rh84LRA-Zd1KN5K2wVhXX9x7QdAZcuv/view?usp=sharing" target="_blank" class="play-button">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Реклама ресторана - Монтаж</h3>
+                            <p class="video-description">Профессиональный монтаж рекламного ролика для ресторана. Динамичные переходы, синхронизация с музыкой, цветокоррекция и работа со звуком для создания продающего видео.</p>
+                            <div class="video-tech">
+                                <span class="tech-tag">Premiere Pro</span>
+                                <span class="tech-tag">Color Grading</span>
+                                <span class="tech-tag">Sound Design</span>
+                                <span class="tech-tag">Dynamic Editing</span>
+                            </div>
+                            <div class="video-links">
+                                <a href="https://drive.google.com/file/d/17Rh84LRA-Zd1KN5K2wVhXX9x7QdAZcuv/view?usp=sharing" class="video-link" target="_blank">
+                                    <i class="fab fa-google-drive"></i> Смотреть на Google Drive
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Видео 2: Монтаж видео про город -->
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <a href="https://drive.google.com/file/d/12z3hqcem_P2s4mPTKl0jVjQ67xRCRPDF/view?usp=sharing" target="_blank" class="play-button">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Городское видео - Монтаж</h3>
+                            <p class="video-description">Кинематографичный монтаж видео о городе. Плавные переходы, атмосферная музыка, работа с темпом и ритмом для создания эмоционального и визуально привлекательного контента.</p>
+                            <div class="video-tech">
+                                <span class="tech-tag">Premiere Pro</span>
+                                <span class="tech-tag">Cinematic</span>
+                                <span class="tech-tag">Transitions</span>
+                                <span class="tech-tag">Atmosphere</span>
+                            </div>
+                            <div class="video-links">
+                                <a href="https://drive.google.com/file/d/12z3hqcem_P2s4mPTKl0jVjQ67xRCRPDF/view?usp=sharing" class="video-link" target="_blank">
+                                    <i class="fab fa-google-drive"></i> Смотреть на Google Drive
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Видео 3: Моушн дизайн -->
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <a href="https://disk.yandex.ru/i/EzfWspWYYjWAtA" target="_blank" class="play-button">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">Моушн дизайн - Демонстрация</h3>
+                            <p class="video-description">Демонстрация навыков моушн-дизайна, анимации и визуальных эффектов. Показывает общий уровень умений в анимации, работе с композициями и создании динамичной графики.</p>
+                            <div class="video-tech">
+                                <span class="tech-tag">After Effects</span>
+                                <span class="tech-tag">Motion Design</span>
+                                <span class="tech-tag">Animation</span>
+                                <span class="tech-tag">Visual Effects</span>
+                            </div>
+                            <div class="video-links">
+                                <a href="https://disk.yandex.ru/i/EzfWspWYYjWAtA" class="video-link" target="_blank">
+                                    <i class="fab fa-yandex"></i> Смотреть на Яндекс.Диск
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция "Контакты" -->
+        <section id="contact" class="section">
+            <h2 class="section-title">КОМПИЛЯЦИЯ КОНТАКТОВ</h2>
+            <div class="contact-form">
+                <div class="form-group">
+                    <label class="form-label" for="name">ИМЯ</label>
+                    <input type="text" id="name" class="form-input" placeholder="Введите ваше имя">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">EMAIL</label>
+                    <input type="email" id="email" class="form-input" placeholder="example@domain.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="message">СООБЩЕНИЕ</label>
+                    <textarea id="message" class="form-textarea" rows="5" placeholder="Опишите ваш проект или задайте вопрос..."></textarea>
+                </div>
+                <button type="submit" class="form-submit">ОТПРАВИТЬ СООБЩЕНИЕ</button>
+            </div>
+        </section>
+
+        <!-- Подвал -->
+        <footer>
+            <p class="signature">ARCHITECT OF DIGITAL REALMS © 2023</p>
+            <p>Вселенная цифрового творчества постоянно расширяется</p>
+        </footer>
+    </div>
+
+    <script>
+        // ===== ПРЕЛОАДЕР =====
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            const mainContainer = document.querySelector('.main-container');
+            const loadingStatus = document.getElementById('loading-status');
+            
+            // Имитация процесса загрузки
+            setTimeout(() => {
+                loadingStatus.textContent = "Loading Assets();";
+            }, 500);
+            
+            setTimeout(() => {
+                loadingStatus.textContent = "Initializing 3D Engine();";
+            }, 1000);
+            
+            setTimeout(() => {
+                loadingStatus.textContent = "Ready!";
+                setTimeout(() => {
+                    preloader.style.opacity = '0';
+                    preloader.style.visibility = 'hidden';
+                    mainContainer.style.opacity = '1';
+                }, 500);
+            }, 1500);
+            
+            // Инициализация частиц
+            initParticles();
+        });
+
+        // ===== ЧАСТИЦЫ НА ФОНЕ =====
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Случайные параметры
+                const size = Math.random() * 4 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                
+                // Применение стилей
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // Случайный цвет
+                const colors = ['#00F3FF', '#CC00FF', '#00FF9D'];
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // ===== НАВИГАЦИЯ ПО СЕКЦИЯМ =====
+        const consoleCommands = document.querySelectorAll('.console-command');
+        
+        consoleCommands.forEach(command => {
+            command.addEventListener('click', function() {
+                const sectionId = this.getAttribute('data-section');
+                const targetSection = document.getElementById(sectionId);
+                
+                if (targetSection) {
+                    // Плавная прокрутка к секции
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Эффект активации команды
+                    consoleCommands.forEach(cmd => cmd.style.color = 'var(--acid-green)');
+                    this.style.color = 'white';
+                    this.style.background = 'rgba(0, 255, 157, 0.2)';
+                }
+            });
+        });
+
+        // ===== ФОРМА ОБРАТНОЙ СВЯЗИ =====
+        const contactForm = document.querySelector('.contact-form');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Получаем данные формы
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Здесь должна быть реальная отправка формы
+            // Например, через fetch на сервер
+            
+            // Временный эфект отправки
+            const submitBtn = this.querySelector('.form-submit');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'ОТПРАВЛЕНО!';
+            submitBtn.style.background = 'linear-gradient(90deg, #00FF9D, #00CC7A)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = 'linear-gradient(90deg, var(--neon-blue), var(--electric-purple))';
+                
+                // Очистка формы
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('message').value = '';
+                
+                alert('Сообщение отправлено! Свяжусь с вами в ближайшее время.');
+            }, 2000);
+        });
+
+        // ===== АНИМАЦИЯ ПРИ СКРОЛЛЕ =====
+        // Простая анимация появления элементов при скролле
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Наблюдаем за элементами, которые должны появляться при скролле
+        const animatedElements = document.querySelectorAll('.skill-node, .macos-window, .polygon-portrait, .video-card');
+        animatedElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // ===== ИНТЕРАКТИВНОСТЬ ДЛЯ ЛОГОТИПОВ В ШАПКЕ =====
+        const collageItems = document.querySelectorAll('.collage-item');
+        collageItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.filter = 'drop-shadow(0 0 20px currentColor)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.filter = 'drop-shadow(0 0 10px currentColor)';
+            });
+        });
+
+        // ===== ИНТЕРАКТИВНОСТЬ ДЛЯ КОНТРОЛОВ MACOS =====
+        const macosControls = document.querySelectorAll('.macos-control');
+        macosControls.forEach(control => {
+            control.addEventListener('click', function() {
+                if (this.classList.contains('macos-close')) {
+                    alert('Закрыть окно - здесь можно добавить реальное закрытие');
+                } else if (this.classList.contains('macos-minimize')) {
+                    alert('Свернуть окно - здесь можно добавить анимацию сворачивания');
+                } else if (this.classList.contains('macos-maximize')) {
+                    alert('Развернуть окно - здесь можно добавить переключение размера');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
